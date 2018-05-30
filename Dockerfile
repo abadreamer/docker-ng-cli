@@ -5,11 +5,11 @@
 
 FROM node:8-stretch
 
-MAINTAINER trion development GmbH "info@trion.de"
+LABEL maintainer="abadreamer@gmail.com"
 
-ARG NG_CLI_VERSION=6.0.5
+ARG NG_CLI_VERSION=1.6.3
 ARG USER_HOME_DIR="/tmp"
-ARG APP_DIR="/app"
+ARG APP_DIR="/sources"
 ARG USER_ID=1000
 
 ENV NPM_CONFIG_LOGLEVEL warn
@@ -25,13 +25,13 @@ RUN set -xe \
     && chown $USER_ID $USER_HOME_DIR \
     && chmod a+rw $USER_HOME_DIR \
     && chown -R node /usr/local/lib /usr/local/include /usr/local/share /usr/local/bin \
-    && (cd "$USER_HOME_DIR"; su node -c "npm install -g @angular/cli@$NG_CLI_VERSION; npm install -g yarn; chmod +x /usr/local/bin/yarn; npm cache clean --force")
+    && (cd "$USER_HOME_DIR"; su node -c "npm install -g @angular/cli@$NG_CLI_VERSION; npm cache clean --force")
 
 #not declared to avoid anonymous volume leak
 #VOLUME "$USER_HOME_DIR/.cache/yarn"
 #VOLUME "$APP_DIR/"
 WORKDIR $APP_DIR
-EXPOSE 4200
+#EXPOSE 4200
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
